@@ -1,0 +1,29 @@
+# Основные настройки
+[general]
+data_dir = "/var/lib/raft"
+log_level = "info"
+
+# Настройки сети
+[network]
+rpc_timeout = "1s"
+max_retries = 3
+retry_backoff = "100ms"
+
+# Настройки производительности
+[performance]
+max_concurrent_rpcs = 100
+rpc_queue_size = 1000
+snapshot_threshold = 100000
+
+# Настройки безопасности
+[security]
+tls_enabled = false
+cert_file = ""
+key_file = ""
+ca_file = ""
+
+# Настройки мониторинга
+[monitoring]
+prometheus_enabled = true
+prometheus_port = 9091
+stats_interval = "10s"

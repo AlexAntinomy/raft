@@ -1,0 +1,29 @@
+# Конфигурация кластера
+cluster:
+  name: "raft-cluster-1"
+  nodes:
+    - id: 1
+      address: "node1:9090"
+      http_port: 8080
+      role: "follower"
+    - id: 2
+      address: "node2:9090"
+      http_port: 8081
+      role: "follower"
+    - id: 3
+      address: "node3:9090"
+      http_port: 8082
+      role: "follower"
+
+# Настройки репликации
+replication:
+  heartbeat_interval: "500ms"
+  election_timeout_min: "1500ms"
+  election_timeout_max: "3000ms"
+  max_append_entries: 1000
+
+# Настройки снапшотов
+snapshot:
+  interval: "10m"
+  retain_count: 3
+  compress: true

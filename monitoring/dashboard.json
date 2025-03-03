@@ -1,0 +1,66 @@
+{
+    "title": "Raft Cluster Dashboard",
+    "panels": [
+      {
+        "type": "graph",
+        "title": "Raft Term",
+        "targets": [
+          {
+            "expr": "raft_term{node_id=~\"$node\"}",
+            "legendFormat": "Node {{node_id}}"
+          }
+        ]
+      },
+      {
+        "type": "stat",
+        "title": "Current Leader",
+        "targets": [
+          {
+            "expr": "count(raft_state{node_id=~\"$node\"} == 2)",
+            "legendFormat": "Leaders"
+          }
+        ]
+      },
+      {
+        "type": "graph",
+        "title": "RPC Requests",
+        "targets": [
+          {
+            "expr": "rate(raft_rpc_requests_total{node_id=~\"$node\", type=~\"$rpc_type\"}[1m])",
+            "legendFormat": "{{node_id}} - {{type}}"
+          }
+        ]
+      },
+      {
+        "type": "table",
+        "title": "Node States",
+        "targets": [
+          {
+            "expr": "raft_state{node_id=~\"$node\"}",
+            "instant": true,
+            "format": "table"
+          }
+        ],
+        "columns": [
+          {"text": "Node", "value": "node_id"},
+          {"text": "State", "value": "value"}
+        ]
+      }
+    ],
+    "templating": {
+      "list": [
+        {
+          "name": "node",
+          "label": "Node",
+          "query": "label_values(raft_term, node_id)",
+          "multi": true
+        },
+        {
+          "name": "rpc_type",
+          "label": "RPC Type",
+          "query": "label_values(raft_rpc_requests_total, type)",
+          "multi": true
+        }
+      ]
+    }
+  }

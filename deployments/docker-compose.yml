@@ -1,0 +1,59 @@
+version: '3.7'
+
+services:
+  node1:
+    image: raft-kv-store:latest
+    container_name: node1
+    ports:
+      - "8081:8080"
+      - "9091:9090"
+    volumes:
+      - node1-data:/var/lib/raft-kv-store
+    environment:
+      - NODE_ID=1
+      - RAFT_ADDRESS=node1:9090
+      - HTTP_ADDRESS=0.0.0.0:8080
+      - PEERS=node2:9090,node3:9090
+    networks:
+      - raftnet
+
+  node2:
+    image: raft-kv-store:latest
+    container_name: node2
+    ports:
+      - "8082:8080"
+      - "9092:9090"
+    volumes:
+      - node2-data:/var/lib/raft-kv-store
+    environment:
+      - NODE_ID=2
+      - RAFT_ADDRESS=node2:9090
+      - HTTP_ADDRESS=0.0.0.0:8080
+      - PEERS=node1:9090,node3:9090
+    networks:
+      - raftnet
+
+  node3:
+    image: raft-kv-store:latest
+    container_name: node3
+    ports:
+      - "8083:8080"
+      - "9093:9090"
+    volumes:
+      - node3-data:/var/lib/raft-kv-store
+    environment:
+      - NODE_ID=3
+      - RAFT_ADDRESS=node3:9090
+      - HTTP_ADDRESS=0.0.0.0:8080
+      - PEERS=node1:9090,node2:9090
+    networks:
+      - raftnet
+
+volumes:
+  node1-data:
+  node2-data:
+  node3-data:
+
+networks:
+  raftnet:
+    driver: bridge

@@ -1,0 +1,62 @@
+syntax = "proto3";
+
+package service;
+
+import "raft.proto";
+
+service KeyValueService {
+  rpc Get(GetRequest) returns (GetResponse) {}
+  rpc Put(PutRequest) returns (PutResponse) {}
+  rpc Delete(DeleteRequest) returns (DeleteResponse) {}
+  rpc JoinCluster(JoinRequest) returns (JoinResponse) {}
+  rpc ClusterStatus(StatusRequest) returns (StatusResponse) {}
+}
+
+message GetRequest {
+  string key = 1;
+}
+
+message GetResponse {
+  string value = 1;
+  bool success = 2;
+}
+
+message PutRequest {
+  string key = 1;
+  string value = 2;
+}
+
+message PutResponse {
+  bool success = 1;
+}
+
+message DeleteRequest {
+  string key = 1;
+}
+
+message DeleteResponse {
+  bool success = 1;
+}
+
+message JoinRequest {
+  string node_id = 1;
+  string address = 2;
+}
+
+message JoinResponse {
+  bool success = 1;
+}
+
+message StatusRequest {}
+
+message StatusResponse {
+  repeated NodeStatus nodes = 1;
+}
+
+message NodeStatus {
+  string node_id = 1;
+  string address = 2;
+  string role = 3;
+  uint64 term = 4;
+  bool is_leader = 5;
+}
